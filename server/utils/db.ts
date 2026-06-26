@@ -12,6 +12,9 @@ export function useDb() {
       database: process.env.DB_NAME || 'wargart02',
       user: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || '',
+      ssl: process.env.DB_HOST && process.env.DB_HOST !== 'localhost'
+        ? { rejectUnauthorized: false }
+        : false,
     })
   }
   return pool
