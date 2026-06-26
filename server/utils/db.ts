@@ -13,7 +13,7 @@ export function useDb() {
       user: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || '',
       ssl: process.env.DB_HOST && process.env.DB_HOST !== 'localhost'
-        ? { rejectUnauthorized: false }
+        ? { rejectUnauthorized: true }
         : false,
     })
   }
