@@ -6,7 +6,12 @@ export default defineEventHandler(async () => {
     await db.query('SELECT 1')
     return { ok: true, db: 'connected' }
   } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e)
-    return { ok: false, error: msg }
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : String(e),
+      code: (e as Record<string, unknown>)?.code,
+      hasUrl: !!process.env.DATABASE_URL,
+      hasHost: !!process.env.DB_HOST,
+    }
   }
 })
