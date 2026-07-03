@@ -11,7 +11,7 @@ export function useDb() {
         connectionString: process.env.DATABASE_URL,
         ssl: process.env.DATABASE_URL.includes('localhost')
           ? false
-          : { rejectUnauthorized: true },
+          : { rejectUnauthorized: false },
       })
     } else {
       pool = new Pool({
