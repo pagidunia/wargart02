@@ -2,6 +2,7 @@
 import { ref, computed, reactive } from 'vue'
 
 const page = ref('dash')
+const sidebarOpen = ref(false)
 const searchQuery = ref('')
 const formSaved = ref(false)
 const formError = ref('')
@@ -141,8 +142,11 @@ async function doDelete(id) {
 <template>
   <div style="display:flex; min-height:100vh;">
 
+    <!-- SIDEBAR TRIGGER STRIP -->
+    <div @mouseenter="sidebarOpen = true" style="position:fixed; top:0; left:0; width:8px; height:100vh; z-index:101;"></div>
+
     <!-- SIDEBAR -->
-    <aside style="width:248px; min-width:248px; background:white; display:flex; flex-direction:column; min-height:100vh; position:fixed; top:0; left:0; bottom:0; z-index:100; border-right:1px solid #f0f0f0;">
+    <aside @mouseenter="sidebarOpen = true" @mouseleave="sidebarOpen = false" :style="`width:248px; min-width:248px; background:white; display:flex; flex-direction:column; min-height:100vh; position:fixed; top:0; left:0; bottom:0; z-index:100; border-right:1px solid #f0f0f0; transform:${sidebarOpen ? 'translateX(0)' : 'translateX(-248px)'}; transition:transform .25s ease; box-shadow:${sidebarOpen ? '4px 0 20px rgba(0,0,0,.08)' : 'none'};`">
 
       <!-- Logo -->
       <div style="padding:24px 20px 20px; border-bottom:1px solid #f5f5f5;">
@@ -216,7 +220,7 @@ async function doDelete(id) {
     </aside>
 
     <!-- MAIN -->
-    <main style="flex:1; margin-left:248px; min-height:100vh; display:flex; flex-direction:column;">
+    <main :style="`flex:1; margin-left:${sidebarOpen ? '248px' : '0'}; min-height:100vh; display:flex; flex-direction:column; transition:margin-left .25s ease;`">
 
       <!-- TOP BAR -->
       <header style="background:white; border-bottom:1px solid #f0f0f0; padding:0 28px; height:58px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;">
