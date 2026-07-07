@@ -91,27 +91,7 @@ function goForm()  {
   Object.assign(form, { alamat:'', nama_pemilik:'', kontak:'', status_hunian:'' })
 }
 
-function goDetail(id)      { page.value = 'detail';      selectedId.value = id }
-function goMarketplace()  { page.value = 'marketplace'; formSaved.value = false }
-function goPlugins()      { page.value = 'plugins';     formSaved.value = false }
-
-const installedPlugins = ref([
-  { id: 1, name: 'Laporan PDF',   desc: 'Export data warga ke PDF',            active: true,  icon: '📄' },
-  { id: 2, name: 'Notifikasi WA', desc: 'Kirim notifikasi via WhatsApp',        active: false, icon: '💬' },
-])
-
-const marketplacePlugins = ref([
-  { id: 10, name: 'Kartu Keluarga', desc: 'Manajemen data kartu keluarga warga',   installed: false, icon: '👨‍👩‍👧' },
-  { id: 11, name: 'Iuran RT',       desc: 'Pencatatan dan tagihan iuran bulanan',  installed: false, icon: '💰' },
-  { id: 12, name: 'Surat Menyurat', desc: 'Template surat keterangan domisili',    installed: true,  icon: '✉️'  },
-  { id: 13, name: 'Keamanan RT',    desc: 'Jadwal piket dan laporan keamanan',     installed: false, icon: '🔒' },
-  { id: 14, name: 'Pengaduan',      desc: 'Form pengaduan dan aspirasi warga',     installed: false, icon: '📢' },
-  { id: 15, name: 'Data Aset',      desc: 'Inventarisasi aset milik RT',           installed: false, icon: '🏠' },
-])
-
-function togglePlugin(p)    { p.active = !p.active }
-function installPlugin(p)   { p.installed = true }
-function uninstallPlugin(p) { p.installed = false }
+function goDetail(id) { page.value = 'detail'; selectedId.value = id }
 
 async function doSave() {
   if (!form.alamat.trim() || !form.nama_pemilik.trim()) {
@@ -187,18 +167,6 @@ async function doDelete(id) {
         <button @click="goForm" :style="`display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:${navW('form')}; text-align:left; width:100%; background:${navBg('form')}; color:${navCol('form')}; transition:all .15s;`">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
           Tambah Data
-        </button>
-
-        <div style="padding:14px 10px 8px; font-size:10px; font-weight:600; color:#9ca3af; letter-spacing:1.2px; text-transform:uppercase; margin-top:4px;">PLUGIN</div>
-
-        <button @click="goMarketplace" :style="`display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:${navW('marketplace')}; text-align:left; width:100%; background:${navBg('marketplace')}; color:${navCol('marketplace')}; transition:all .15s;`">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          Marketplace
-        </button>
-
-        <button @click="goPlugins" :style="`display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:${navW('plugins')}; text-align:left; width:100%; background:${navBg('plugins')}; color:${navCol('plugins')}; transition:all .15s;`">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>
-          Kelola Plugin
         </button>
 
         <div style="padding:14px 10px 8px; font-size:10px; font-weight:600; color:#9ca3af; letter-spacing:1.2px; text-transform:uppercase; margin-top:4px;">SISTEM</div>
@@ -586,73 +554,6 @@ async function doDelete(id) {
 
         <div style="display:flex; gap:10px;">
           <button @click="doDelete(selected.id)" style="background:#fef2f2; color:#dc2626; border:none; border-radius:8px; padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer;">Hapus Data</button>
-        </div>
-      </div>
-
-      <!-- MARKETPLACE -->
-      <div v-if="page === 'marketplace'" style="padding:24px 28px; animation:fadeUp .35s ease;">
-        <div style="margin-bottom:20px;">
-          <h2 style="font-size:18px; font-weight:700; color:#111827; margin-bottom:4px;">Marketplace Plugin</h2>
-          <p style="font-size:13px; color:#9ca3af;">Tambah fitur baru untuk sistem RT 02</p>
-        </div>
-
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
-          <div v-for="p in marketplacePlugins" :key="p.id" style="background:white; border-radius:12px; border:1px solid #f0f0f0; padding:20px; display:flex; flex-direction:column; gap:12px;">
-            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
-              <div style="width:44px; height:44px; background:#f3f4f6; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px;">{{ p.icon }}</div>
-              <span v-if="p.installed" style="font-size:10px; font-weight:600; background:#d1fae5; color:#065f46; padding:3px 8px; border-radius:99px;">Terpasang</span>
-            </div>
-            <div>
-              <div style="font-size:14px; font-weight:700; color:#111827;">{{ p.name }}</div>
-              <div style="font-size:12px; color:#9ca3af; margin-top:3px;">{{ p.desc }}</div>
-            </div>
-            <div style="margin-top:auto;">
-              <button v-if="!p.installed" @click="installPlugin(p)" style="width:100%; background:#0d3d36; color:white; border:none; border-radius:8px; padding:8px 0; font-size:13px; font-weight:600; cursor:pointer;">
-                Install
-              </button>
-              <button v-else @click="() => { uninstallPlugin(p); goPlugins() }" style="width:100%; background:#f3f4f6; color:#6b7280; border:none; border-radius:8px; padding:8px 0; font-size:13px; font-weight:500; cursor:pointer;">
-                Kelola
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- KELOLA PLUGIN -->
-      <div v-if="page === 'plugins'" style="padding:24px 28px; animation:fadeUp .35s ease;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-          <div>
-            <h2 style="font-size:18px; font-weight:700; color:#111827; margin-bottom:4px;">Kelola Plugin</h2>
-            <p style="font-size:13px; color:#9ca3af;">Plugin yang terpasang di sistem RT 02</p>
-          </div>
-          <button @click="goMarketplace" style="display:flex; align-items:center; gap:6px; background:#0d3d36; color:white; border:none; border-radius:8px; padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Plugin
-          </button>
-        </div>
-
-        <div style="background:white; border-radius:12px; border:1px solid #f0f0f0; overflow:hidden;">
-          <div v-for="(p, i) in installedPlugins" :key="p.id" :style="`padding:16px 20px; display:flex; align-items:center; gap:14px; ${i > 0 ? 'border-top:1px solid #f5f5f5;' : ''}`">
-            <div style="width:40px; height:40px; background:#f3f4f6; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">{{ p.icon }}</div>
-            <div style="flex:1; min-width:0;">
-              <div style="font-size:14px; font-weight:600; color:#111827;">{{ p.name }}</div>
-              <div style="font-size:12px; color:#9ca3af; margin-top:2px;">{{ p.desc }}</div>
-            </div>
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span :style="`font-size:11px; font-weight:600; padding:3px 10px; border-radius:99px; ${p.active ? 'background:#d1fae5; color:#065f46;' : 'background:#f3f4f6; color:#9ca3af;'}`">
-                {{ p.active ? 'Aktif' : 'Nonaktif' }}
-              </span>
-              <button @click="togglePlugin(p)" :style="`border:none; border-radius:7px; padding:6px 14px; font-size:12px; font-weight:600; cursor:pointer; ${p.active ? 'background:#fef2f2; color:#dc2626;' : 'background:#ecfdf5; color:#059669;'}`">
-                {{ p.active ? 'Nonaktifkan' : 'Aktifkan' }}
-              </button>
-            </div>
-          </div>
-
-          <div v-if="installedPlugins.length === 0" style="padding:48px 20px; text-align:center; color:#9ca3af;">
-            <div style="font-size:32px; margin-bottom:10px;">🔌</div>
-            <p style="font-size:14px; font-weight:500; color:#6b7280;">Belum ada plugin terpasang</p>
-            <button @click="goMarketplace" style="margin-top:14px; background:#0d3d36; color:white; border:none; border-radius:8px; padding:9px 20px; font-size:13px; font-weight:600; cursor:pointer;">Buka Marketplace</button>
-          </div>
         </div>
       </div>
 
