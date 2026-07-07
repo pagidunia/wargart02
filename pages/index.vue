@@ -142,7 +142,16 @@ async function doDelete(id) {
 <template>
   <div style="display:flex; min-height:100vh;">
 
-    <!-- SIDEBAR TRIGGER STRIP -->
+    <!-- TOGGLE BUTTON -->
+    <button @click="sidebarOpen = !sidebarOpen" :style="`position:fixed; top:14px; left:${sidebarOpen ? '210px' : '12px'}; z-index:102; width:36px; height:36px; border-radius:8px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; background:${sidebarOpen ? '#f0fdf4' : '#0d3d36'}; box-shadow:0 2px 8px rgba(0,0,0,.15); transition:left .25s ease, background .2s;`">
+      <svg v-if="!sidebarOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <!-- OVERLAY (mobile) -->
+    <div v-if="sidebarOpen" @click="sidebarOpen = false" style="position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:99;"></div>
+
+    <!-- SIDEBAR TRIGGER STRIP (desktop hover) -->
     <div @mouseenter="sidebarOpen = true" style="position:fixed; top:0; left:0; width:8px; height:100vh; z-index:101;"></div>
 
     <!-- SIDEBAR -->
@@ -224,7 +233,7 @@ async function doDelete(id) {
 
       <!-- TOP BAR -->
       <header style="background:white; border-bottom:1px solid #f0f0f0; padding:0 28px; height:58px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;">
-        <div style="position:relative; flex:1; max-width:320px;">
+        <div :style="`position:relative; flex:1; max-width:320px; transition:margin-left .25s ease; margin-left:${sidebarOpen ? '0' : '44px'};`">
           <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input type="text" placeholder="Cari nama atau alamat…" v-model="searchQuery" style="width:100%; padding:7px 12px 7px 32px; border:1.5px solid #e5e7eb; border-radius:8px; font-size:13px; color:#111827; outline:none; background:#fafafa;">
         </div>
